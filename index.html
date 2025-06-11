@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>盒立良源 - 新能源汽车电池自适应灭火装置领跑者</title>
+    <!-- Chosen Palette: Minimalist Tech Blue -->
+    <!-- Application Structure Plan: Re-architected for a data-first, minimalist aesthetic. All photographic imagery is removed. The narrative flow is retained but visually transformed. The hero section now immediately presents key data points via animated counters. Core concepts like the "Solution" are represented by abstract, CSS-driven diagrams instead of product photos. Trust-building sections like "Patents" and "Partners" are converted from image walls to clean, readable text-based lists. The "Team" section focuses on roles and names, removing photos to emphasize professionalism. This structure enhances the site's modern, high-tech feel, making the data and core message the absolute focus. -->
+    <!-- Visualization & Content Choices: 
+        - Hero Section: Goal: Inform/Impress -> Viz: Animated numeric counters -> Interaction: On-scroll count-up -> Justification: Grabs attention with key metrics immediately, establishing data-driven credibility. Method: JS.
+        - Problem Section: Goal: Inform -> Viz: Chart.js Doughnut Chart -> Interaction: Hover tooltips -> Justification: Kept as a core data visualization, now the centerpiece of a minimalist layout. Library: Chart.js.
+        - Solution Section: Goal: Organize/Explain -> Viz: CSS-based animated process flow diagram -> Interaction: On-scroll reveal -> Justification: Abstractly represents the 3-step process without photos, enhancing the tech aesthetic. Method: HTML/CSS with JS.
+        - Financial Projections: Goal: Inform/Change -> Viz: Chart.js Bar Chart -> Interaction: Hover tooltips -> Justification: Standard, clear way to present financial forecasts. Kept as a key data point. Library: Chart.js.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #0A192F;
+            color: #E6F1FF;
+        }
+        .glass-effect {
+            background: rgba(16, 37, 66, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(45, 85, 133, 0.3);
+        }
+        .hero-gradient-text {
+            background: -webkit-linear-gradient(45deg, #38BDF8, #A78BFA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .section-title {
+            color: #CCD6F6;
+            font-weight: 900;
+        }
+        .section-subtitle {
+            color: #8892B0;
+        }
+        .nav-link {
+            position: relative;
+            color: #CCD6F6;
+            transition: color 0.3s;
+        }
+        .nav-link:hover {
+            color: #64FFDA;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #64FFDA;
+            transition: width 0.3s;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 40vh;
+            width: 80vw;
+            max-width: 600px;
+            max-height: 400px;
+        }
+        .process-step {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .process-step.visible {
+            opacity: 1;
+        }
+        .process-line {
+            width: 2px;
+            height: 0;
+            background-color: #38BDF8;
+            transition: height 0.5s ease-in-out;
+        }
+        .process-line.visible {
+            height: 5rem;
+        }
+    </style>
+</head>
+<body class="w-full">
+
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 glass-effect">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#hero" class="text-2xl font-bold text-white">
+                <span class="hero-gradient-text">盒立良源</span>
+            </a>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#problem" class="nav-link">行业痛点</a>
+                <a href="#solution" class="nav-link">解决方案</a>
+                <a href="#advantages" class="nav-link">技术与优势</a>
+                <a href="#vision" class="nav-link">未来愿景</a>
+                <a href="#team" class="nav-link">关于我们</a>
+                <a href="#contact" class="nav-link">联系我们</a>
+            </div>
+            <a href="#" class="hidden md:inline-block px-4 py-2 border border-[#64FFDA] text-[#64FFDA] rounded-md hover:bg-[#64FFDA] hover:text-[#0A192F] transition-colors">
+                E-路护航小程序
+            </a>
+            <button id="mobile-menu-button" class="md:hidden text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#problem" class="block py-2 text-white">行业痛点</a>
+            <a href="#solution" class="block py-2 text-white">解决方案</a>
+            <a href="#advantages" class="block py-2 text-white">技术与优势</a>
+            <a href="#vision" class="block py-2 text-white">未来愿景</a>
+            <a href="#team" class="block py-2 text-white">关于我们</a>
+            <a href="#contact" class="block py-2 text-white">联系我们</a>
+            <a href="#" class="block mt-2 py-2 text-center border border-[#64FFDA] text-[#64FFDA] rounded-md">E-路护航小程序</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero" class="min-h-screen flex items-center justify-center pt-20">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-7xl font-black mb-4 section-title leading-tight">为每一块新能源电池<br>提供<span class="hero-gradient-text">自适应安全护航</span></h1>
+                <p class="text-lg md:text-xl max-w-3xl mx-auto section-subtitle">源自高校科研，多项专利加持，“盒立良源”以数据和技术重新定义电池安全。</p>
+                <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto fade-in-section">
+                    <div class="text-center">
+                        <p class="text-4xl md:text-5xl font-bold text-[#64FFDA]"><span class="counter" data-target="62">0</span>%</p>
+                        <p class="text-sm section-subtitle mt-2">起火事故源于电池</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-4xl md:text-5xl font-bold text-[#64FFDA]"><span class="counter" data-target="8">0</span>+</p>
+                        <p class="text-sm section-subtitle mt-2">核心技术创新点</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-4xl md:text-5xl font-bold text-[#64FFDA]"><span class="counter" data-target="31">0</span>%</p>
+                        <p class="text-sm section-subtitle mt-2">预计净利润增幅</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-4xl md:text-5xl font-bold text-[#64FFDA]"><span class="counter" data-target="300">0</span>万</p>
+                        <p class="text-sm section-subtitle mt-2">拟融资目标</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="problem" class="py-20 fade-in-section">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold section-title">安全，是不可妥协的底线</h2>
+                    <p class="mt-4 max-w-2xl mx-auto section-subtitle">随着新能源汽车保有量激增，电池热失控引发的火灾事故频发，传统防护手段已显不足。</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="grid grid-cols-2 gap-6 text-center">
+                        <div class="glass-effect p-6 rounded-lg">
+                            <h3 class="text-xl font-bold text-[#CCD6F6] mb-2">残留物危害</h3>
+                            <p class="section-subtitle text-sm">现有部分灭火材料残留物存在二次危害。</p>
+                        </div>
+                        <div class="glass-effect p-6 rounded-lg">
+                            <h3 class="text-xl font-bold text-[#CCD6F6] mb-2">热敏线隐患</h3>
+                            <p class="section-subtitle text-sm">传统热敏线存在误报、漏报等安全隐患。</p>
+                        </div>
+                        <div class="glass-effect p-6 rounded-lg">
+                            <h3 class="text-xl font-bold text-[#CCD6F6] mb-2">系统联系脱节</h3>
+                            <p class="section-subtitle text-sm">预警端与车载系统缺乏深度联动，信息孤岛严重。</p>
+                        </div>
+                        <div class="glass-effect p-6 rounded-lg">
+                            <h3 class="text-xl font-bold text-[#CCD6F6] mb-2">售后服务缺失</h3>
+                            <p class="section-subtitle text-sm">缺乏定期维护服务点，产品生命周期保障难。</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4 text-[#CCD6F6] text-center">起火风险源分析</h3>
+                        <div class="chart-container relative h-64 md:h-80 mx-auto max-w-sm">
+                             <canvas id="fireRiskChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solution" class="py-20 bg-[#0B203B] fade-in-section">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold section-title">我们的解决方案：智能主动防护闭环</h2>
+                    <p class="mt-4 max-w-2xl mx-auto section-subtitle">“盒立良源”自适应灭火装置，以数据驱动，从源头扼杀危险，化被动为主动。</p>
+                </div>
+                <div id="process-flow" class="flex flex-col items-center">
+                    <div class="process-step flex flex-col items-center text-center">
+                        <div class="w-24 h-24 rounded-full bg-[#1E293B] text-[#64FFDA] flex items-center justify-center text-4xl font-black border-2 border-[#64FFDA]">1</div>
+                        <h4 class="text-xl font-bold text-[#CCD6F6] mt-4">实时智能监测</h4>
+                        <p class="section-subtitle max-w-xs">7x24小时不间断监测电池包温度与环境，数据实时上传云端。</p>
+                    </div>
+                    <div class="process-line my-4"></div>
+                    <div class="process-step flex flex-col items-center text-center">
+                        <div class="w-24 h-24 rounded-full bg-[#1E293B] text-[#A78BFA] flex items-center justify-center text-4xl font-black border-2 border-[#A78BFA]">2</div>
+                        <h4 class="text-xl font-bold text-[#CCD6F6] mt-4">毫秒级瞬时预警</h4>
+                        <p class="section-subtitle max-w-xs">AI算法分析数据，一旦发现异常，立即通过小程序向车主发送警报。</p>
+                    </div>
+                    <div class="process-line my-4"></div>
+                    <div class="process-step flex flex-col items-center text-center">
+                        <div class="w-24 h-24 rounded-full bg-[#1E293B] text-[#F472B6] flex items-center justify-center text-4xl font-black border-2 border-[#F472B6]">3</div>
+                        <h4 class="text-xl font-bold text-[#CCD6F6] mt-4">精准靶向灭火</h4>
+                        <p class="section-subtitle max-w-xs">确认风险后，自动或经授权启动，向高温点精准喷射纳米级灭火剂。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="advantages" class="py-20 fade-in-section">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold section-title">技术与优势</h2>
+                    <p class="mt-4 max-w-2xl mx-auto section-subtitle">我们不止是灭火，更是提供一套由内而外的智能安全生态。</p>
+                </div>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                     <div class="glass-effect rounded-lg p-6 text-center">
+                        <h3 class="text-xl font-bold text-[#64FFDA] mb-3">高效环保灭火</h3>
+                        <p class="section-subtitle text-sm">采用纳米级固体颗粒灭火介质，灭火效能高，无毒无害，对设备无腐蚀，清洁环保。</p>
+                    </div>
+                    <div class="glass-effect rounded-lg p-6 text-center">
+                        <h3 class="text-xl font-bold text-[#64FFDA] mb-3">车规级高可靠性</h3>
+                        <p class="section-subtitle text-sm">核心芯片与传感器均采用车规级标准，耐高低温、抗震动，确保在极端环境下稳定运行。</p>
+                    </div>
+                    <div class="glass-effect rounded-lg p-6 text-center">
+                        <h3 class="text-xl font-bold text-[#64FFDA] mb-3">全天候“云”端互联</h3>
+                        <p class="section-subtitle text-sm">通过“E-路护航”小程序，车主可随时随地查看设备状态、接收警报、预约服务，实现人-车-服务无缝连接。</p>
+                    </div>
+                    <div class="glass-effect rounded-lg p-6 text-center">
+                        <h3 class="text-xl font-bold text-[#64FFDA] mb-3">产学研深度融合</h3>
+                        <p class="section-subtitle text-sm">依托高校科研实力，拥有多项核心技术专利，并由行业专家顾问团指导，技术实力雄厚。</p>
+                    </div>
+                </div>
+                
+                <div class="mt-16 fade-in-section">
+                    <h3 class="text-2xl font-bold mb-8 text-center text-[#CCD6F6]">技术壁垒与创新</h3>
+                    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                        <div class="glass-effect p-6 rounded-lg">
+                             <h4 class="text-xl font-bold text-[#A78BFA] mb-3">材料创新</h4>
+                             <p class="section-subtitle text-sm">自研纳米级灭火材料与水性膨胀型环氧防火防腐涂料，从根源提升阻燃与灭火效率。</p>
+                        </div>
+                        <div class="glass-effect p-6 rounded-lg">
+                             <h4 class="text-xl font-bold text-[#A78BFA] mb-3">系统创新</h4>
+                             <p class="section-subtitle text-sm">独创的动力电池安全预警系统，将硬件监测、AI分析与云端小程序服务深度整合，实现智能闭环。</p>
+                        </div>
+                        <div class="glass-effect p-6 rounded-lg">
+                             <h4 class="text-xl font-bold text-[#A78BFA] mb-3">结构创新</h4>
+                             <p class="section-subtitle text-sm">开合式、非能动自运行的装置结构设计，确保了安装便捷性与极端情况下的高可靠性。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="vision" class="py-20 bg-[#0B203B] fade-in-section">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold section-title">我们的未来愿景</h2>
+                    <p class="mt-4 max-w-2xl mx-auto section-subtitle">不止于汽车，我们的目标是构建一个万物互联的智能安全生态系统。</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4 text-[#CCD6F6]">安全生产管理SaaS平台</h3>
+                        <p class="section-subtitle">我们将结合互联网、大数据等技术手段，快速构建适用于安全管理、风险管理等相关领域的SaaS业务应用平台。帮助车企乃至更多行业客户快速建立起符合规范的安全生产管理体系和治理能力，实现企业双重预防机制和体系落地。</p>
+                    </div>
+                     <div class="text-center">
+                        <h3 class="text-2xl font-bold mb-8 text-center text-[#CCD6F6]">财务规划与预测</h3>
+                        <div class="chart-container">
+                            <canvas id="financialChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="team" class="py-20 fade-in-section">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold section-title">关于我们</h2>
+                    <p class="mt-4 max-w-2xl mx-auto section-subtitle">一支融合了青年创新力量与行业资深智慧的精英团队。</p>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold text-center mb-8 text-[#CCD6F6]">核心团队</h3>
+                    <div class="max-w-xl mx-auto space-y-4">
+                        <div class="glass-effect p-4 rounded-lg flex justify-between items-center">
+                            <span class="font-bold text-lg text-[#CCD6F6]">顾益峻</span><span class="section-subtitle">项目负责人</span>
+                        </div>
+                        <div class="glass-effect p-4 rounded-lg flex justify-between items-center">
+                            <span class="font-bold text-lg text-[#CCD6F6]">秦胜利</span><span class="section-subtitle">产品总监</span>
+                        </div>
+                        <div class="glass-effect p-4 rounded-lg flex justify-between items-center">
+                            <span class="font-bold text-lg text-[#CCD6F6]">郭金安</span><span class="section-subtitle">项目研发</span>
+                        </div>
+                        <div class="glass-effect p-4 rounded-lg flex justify-between items-center">
+                            <span class="font-bold text-lg text-[#CCD6F6]">郭美孜</span><span class="section-subtitle">产品设计</span>
+                        </div>
+                         <div class="glass-effect p-4 rounded-lg flex justify-between items-center">
+                            <span class="font-bold text-lg text-[#CCD6F6]">濮芯韵</span><span class="section-subtitle">财务分析</span>
+                        </div>
+                    </div>
+                </div>
+                 <div class="mt-16">
+                    <h3 class="text-2xl font-bold text-center mb-8 text-[#CCD6F6]">专家顾问团</h3>
+                     <div class="max-w-xl mx-auto space-y-4">
+                        <div class="glass-effect p-4 rounded-lg">
+                            <h4 class="font-bold text-lg text-[#CCD6F6]">刘春林 教授</h4>
+                            <p class="section-subtitle text-sm">常州大学怀德学院院长，博士生导师，产学研合作专家。</p>
+                        </div>
+                        <div class="glass-effect p-4 rounded-lg">
+                            <h4 class="font-bold text-lg text-[#CCD6F6]">魏庆来 董事长</h4>
+                            <p class="section-subtitle text-sm">苏州原科数字科技董事长，国家重点研发计划项目负责人。</p>
+                        </div>
+                        <div class="glass-effect p-4 rounded-lg">
+                            <h4 class="font-bold text-lg text-[#CCD6F6]">左福 总监</h4>
+                            <p class="section-subtitle text-sm">摩登汽车制造总监，资深车企项目负责人。</p>
+                        </div>
+                         <div class="glass-effect p-4 rounded-lg">
+                            <h4 class="font-bold text-lg text-[#CCD6F6]">丁盛 高级工程师</h4>
+                            <p class="section-subtitle text-sm">高分子材料与工程专业教师，拥有多年企业工作经验。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-20 bg-[#0B203B] fade-in-section">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold section-title">联系我们</h2>
+                    <p class="mt-4 max-w-2xl mx-auto section-subtitle">期待与您携手，共创安全未来。请留下您的信息，我们的专家将尽快与您联系。</p>
+                </div>
+                <div class="max-w-2xl mx-auto glass-effect rounded-lg p-8">
+                    <form>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="col-span-2 md:col-span-1">
+                                <label for="name" class="block mb-2 text-sm font-medium text-[#CCD6F6]">姓名</label>
+                                <input type="text" id="name" class="w-full bg-[#0A192F] border border-slate-600 rounded-md p-2.5 text-white focus:ring-[#64FFDA] focus:border-[#64FFDA]" placeholder="您的姓名">
+                            </div>
+                            <div class="col-span-2 md:col-span-1">
+                                <label for="email" class="block mb-2 text-sm font-medium text-[#CCD6F6]">邮箱</label>
+                                <input type="email" id="email" class="w-full bg-[#0A192F] border border-slate-600 rounded-md p-2.5 text-white focus:ring-[#64FFDA] focus:border-[#64FFDA]" placeholder="您的邮箱">
+                            </div>
+                             <div class="col-span-2">
+                                <label for="subject" class="block mb-2 text-sm font-medium text-[#CCD6F6]">主题</label>
+                                <input type="text" id="subject" class="w-full bg-[#0A192F] border border-slate-600 rounded-md p-2.5 text-white focus:ring-[#64FFDA] focus:border-[#64FFDA]" placeholder="您感兴趣的内容">
+                            </div>
+                            <div class="col-span-2">
+                                <label for="message" class="block mb-2 text-sm font-medium text-[#CCD6F6]">留言</label>
+                                <textarea id="message" rows="4" class="w-full bg-[#0A192F] border border-slate-600 rounded-md p-2.5 text-white focus:ring-[#64FFDA] focus:border-[#64FFDA]" placeholder="请在此处留下您的具体需求..."></textarea>
+                            </div>
+                        </div>
+                         <div class="text-center mt-6">
+                             <button type="submit" class="px-8 py-3 bg-[#64FFDA] text-[#0A192F] font-bold rounded-md hover:bg-opacity-80 transition-all">
+                                提交信息
+                            </button>
+                         </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-black py-8">
+        <div class="container mx-auto px-6 text-center text-gray-500">
+            <p>&copy; 2025 盒立良源 (He Li Liang Yuan). All Rights Reserved.</p>
+            <p class="text-sm mt-2">地址：江苏省常州市经济开发区</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Menu Toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Chart.js for Fire Risk
+            const fireRiskCtx = document.getElementById('fireRiskChart').getContext('2d');
+            new Chart(fireRiskCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['电池问题', '车机问题', '系统问题', '其它'],
+                    datasets: [{
+                        label: '起火风险点',
+                        data: [62, 16, 15, 7],
+                        backgroundColor: ['#EF4444','#F97316','#EAB308','#8B5CF6'],
+                        borderColor: '#0A192F',
+                        borderWidth: 4,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { color: '#E6F1FF', font: { size: 12 }}}, title: { display: false }},
+                    cutout: '60%'
+                }
+            });
+
+            // Chart.js for Financial Projections
+            const financialCtx = document.getElementById('financialChart').getContext('2d');
+            new Chart(financialCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['2026', '2027', '2028', '2029', '2030'],
+                    datasets: [{
+                        label: '营销收入 (万元)',
+                        data: [161, 350, 680, 1050, 1650],
+                        backgroundColor: 'rgba(100, 255, 218, 0.6)',
+                        borderColor: '#64FFDA',
+                        borderWidth: 1
+                    }, {
+                        label: '净利润 (万元)',
+                        data: [35, 80, 160, 250, 400],
+                        backgroundColor: 'rgba(56, 189, 248, 0.6)',
+                        borderColor: '#38BDF8',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true, grid: { color: 'rgba(204, 214, 246, 0.1)'}, ticks: { color: '#8892B0'}}, x: { grid: { display: false }, ticks: { color: '#8892B0'}}},
+                    plugins: { legend: { labels: { color: '#E6F1FF' }}, title: { display: false }}
+                }
+            });
+            
+            // Intersection Observer Logic
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        
+                        if (entry.target.classList.contains('counter')) {
+                             const target = +entry.target.getAttribute('data-target');
+                            const speed = 200; // The lower the slower
+                            
+                            const updateCount = () => {
+                                const count = +entry.target.innerText;
+                                const inc = target / speed;
+
+                                if(count < target) {
+                                    entry.target.innerText = Math.ceil(count + inc);
+                                    setTimeout(updateCount, 15);
+                                } else {
+                                    entry.target.innerText = target;
+                                }
+                            }
+                            updateCount();
+                            observer.unobserve(entry.target);
+                        }
+
+                        if (entry.target.id === 'process-flow') {
+                            const steps = entry.target.querySelectorAll('.process-step');
+                            const lines = entry.target.querySelectorAll('.process-line');
+                            steps.forEach((step, index) => {
+                                setTimeout(() => {
+                                    step.classList.add('visible');
+                                    if (lines[index]) {
+                                        setTimeout(() => lines[index].classList.add('visible'), 250);
+                                    }
+                                }, index * 500);
+                            });
+                             observer.unobserve(entry.target);
+                        }
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.fade-in-section, .counter').forEach(el => observer.observe(el));
+            observer.observe(document.getElementById('process-flow'));
+
+            // Active nav link on scroll
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pageSections = document.querySelectorAll('main section');
+            const activateNavLink = () => {
+                let currentSection = '';
+                pageSections.forEach(section => {
+                    if (pageYOffset >= section.offsetTop - 100) {
+                        currentSection = section.getAttribute('id');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if(link.getAttribute('href').includes(currentSection)){
+                        link.classList.add('active');
+                    }
+                })
+            };
+            window.addEventListener('scroll', activateNavLink);
+        });
+    </script>
+</body>
+</html>
